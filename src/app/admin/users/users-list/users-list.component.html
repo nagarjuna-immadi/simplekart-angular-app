@@ -1,0 +1,87 @@
+<div class="container admin-container">
+  <div class="row">
+    <div class="col-lg-12">
+      <ngb-alert *ngIf="successMessage" type="success" [dismissible]="true" (close)='successMessage=""'>{{ successMessage }}</ngb-alert>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card list-card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-6 list-header"><h5>Users</h5></div>
+            <div class="col-6">
+              <div class="row">
+                <div class="col-9">
+                  <div class="input-group">
+                    <input type="text" 
+                      [(ngModel)]="paginationSettings.searchTerm"
+                      (keyup.enter)="search()"
+                      (input)="!paginationSettings.searchTerm ? search() : ''"
+                      class="form-control" 
+                      placeholder="Type and hit enter to search" />
+                    <div class="input-group-append" (click)="search()">
+                      <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-primary" [routerLink]="['/admin/users', '0']">Add User</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table simplekart-table">
+            <thead>
+              <tr>
+                <th scope="col" (click)="sort('firstName')">First Name <span class="sort-icon" *ngIf="paginationSettings.sortBy == 'firstName'"><i class="fas" [ngClass]="getSortIconClass()"></i></span></th>
+                <th scope="col" (click)="sort('lastName')">Last Name <span class="sort-icon" *ngIf="paginationSettings.sortBy == 'lastName'"><i class="fas" [ngClass]="getSortIconClass()"></i></span></th>
+                <th scope="col" (click)="sort('email')">Email <span class="sort-icon" *ngIf="paginationSettings.sortBy == 'email'"><i class="fas" [ngClass]="getSortIconClass()"></i></span></th>
+                <th scope="col" (click)="sort('gender')">Gender <span class="sort-icon" *ngIf="paginationSettings.sortBy == 'gender'"><i class="fas" [ngClass]="getSortIconClass()"></i></span></th>
+                <th scope="col" class="not-sortable">Active</th>
+                <th scope="col" class="not-sortable">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="totalItems">
+                <tr *ngFor="let user of users">
+                  <td>{{ user.firstName }}</td>
+                  <td>{{ user.lastName }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.gender }}</td>
+                  <td [ngClass]="user.isActive ? 'text-success':'text-danger'">{{ user.isActive ? 'YES' : 'No' }}</td>
+                  <td>
+                    <i class="fas fa-info-circle text-info" (click)="viewUserDetails(user)"></i> &nbsp;&nbsp;&nbsp;
+                    <i class="fas fa-user-edit text-info" [routerLink]="['/admin/users', user._id]"></i> &nbsp;&nbsp;&nbsp;
+                    <i class="fas fa-trash-alt text-danger" (click)="confirmDelete(user)"></i>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="!totalItems" class="text-center text-info">
+                <td colspan="6">No Users Found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 pagination-container">
+      <select [(ngModel)]="paginationSettings.perPage" (change)="pageSizeChange()" class="float-left form-control per-page">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+      </select>
+      <ngb-pagination class="float-right" [collectionSize]="totalItems" 
+        [(page)]="paginationSettings.page" 
+        [(pageSize)]="paginationSettings.perPage" 
+        [maxSize]="5" 
+        [rotate]="true" 
+        [boundaryLinks]="true"
+        (pageChange)="pageChange()">
+      </ngb-pagination>
+    </div>
+  </div>
+</div>

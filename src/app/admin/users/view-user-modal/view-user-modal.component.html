@@ -1,0 +1,83 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    <span>User Details</span>
+  </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" [class.enable-modal-scroll]="user.addresses.length">
+  <div class="form-group row">
+    <label class="col-sm-3 col-form-label detail-label">Email</label>
+    <div class="col-sm-9 detail-value">{{ user.email }}</div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-3 col-form-label detail-label">First Name</label>
+    <div class="col-sm-9 detail-value">{{ user.firstName }}</div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-3 col-form-label detail-label">Last Name</label>
+    <div class="col-sm-9 detail-value">{{ user.lastName }}</div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-3 col-form-label detail-label">Gender</label>
+    <div class="col-sm-9 detail-value">{{ user.gender }}</div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-3 col-form-label detail-label">Is Active</label>
+    <div class="col-sm-9 detail-value">{{ user.isActive ? 'YES' : 'NO' }}</div>
+  </div>
+
+  <ng-container *ngIf="user.addresses.length">
+    <div class="card address-card" *ngFor="let address of user.addresses; let i=index;">
+      <div class="card-header">Address {{ i+1 }}</div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label detail-label">Type</label>
+          <div class="col-sm-9 detail-value">{{ address.type }}</div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label detail-label">Stree 1</label>
+          <div class="col-sm-9 detail-value">{{ address.street1 }}</div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label detail-label">Stree 2</label>
+          <div class="col-sm-9 detail-value">{{ address.street2 ? address.street2 : 'N/A' }}</div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label detail-label">State</label>
+          <div class="col-sm-9 detail-value">{{ address.state.name }}</div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label detail-label">City</label>
+          <div class="col-sm-9 detail-value">{{ address.city.name }}</div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label detail-label">Zip Code</label>
+          <div class="col-sm-9 detail-value">{{ address.zip }}</div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!user.addresses.length">
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label detail-label">Addresses</label>
+      <div class="col-sm-9 detail-value">N/A</div>
+    </div>
+  </ng-container>
+</div>
+<div class="modal-footer">
+  <div>
+    <button class="btn btn-primary" (click)="activeModal.dismiss('Cross click')">Close</button>
+  </div>
+</div>

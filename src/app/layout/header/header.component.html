@@ -1,0 +1,63 @@
+<div class="header-container">
+  <div class="container">
+    <div class="row no-gutters">
+      <div class="col-2 logo">
+        <a routerLink="/home"><i class="fas fa-shipping-fast"></i>SimpleKart</a>
+      </div>
+      <div class="col-5">
+        <div class="input-group search-bar" *ngIf="!isAdmin">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search for products, brands and more"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <i class="fas fa-search"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-5 text-right menu-links">
+        <ul>
+          <li (click)="openLoginModal()" *ngIf="!isLoggedIn">Login & Signup</li>
+          <ng-container *ngIf="isLoggedIn">
+            <li><a routerLink="/profile">{{ currentUser.firstName }}  {{ currentUser.lastName }}</a></li>
+            <ng-container *ngIf="!isAdmin">
+              <li><a routerLink="/orders">Orders</a></li>
+              <li><a routerLink="/cart"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+            </ng-container>
+            <li (click)="logout()">Logout</li>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <div class="container">
+    <div class="row no-gutters main-menu">
+      <div class="col-12">
+        <ul class="menu-items admin-menu" *ngIf="isAdmin">
+          <li><a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a></li>
+          <li><a routerLink="/admin/users" routerLinkActive="active">Users</a></li>
+          <li><a routerLink="/admin/categories" routerLinkActive="active">Categories</a></li>
+          <li><a routerLink="/admin/products" routerLinkActive="active">Products</a></li>
+          <li><a routerLink="/admin/orders" routerLinkActive="active">Orders</a></li>
+          <li><a routerLink="/admin/payments" routerLinkActive="active">Payments</a></li>
+        </ul>
+        <ul class="menu-items customer-menu" *ngIf="!isAdmin">
+          <li><a routerLink="/products" [queryParams]="{category: 'electronics'}">Electronics</a></li>
+          <li><a routerLink="/products" [queryParams]="{category: 'appliances'}">TVs & Appliances</a></li>
+          <li><a routerLink="/products" [queryParams]="{category: 'men'}">Men</a></li>
+          <li><a routerLink="/products" [queryParams]="{category: 'women'}">Women</a></li>
+          <li><a routerLink="/products" [queryParams]="{category: 'kids'}">Baby & Kids</a></li>
+          <li><a routerLink="/products" [queryParams]="{category: 'home'}">Home & Furniture</a></li>
+          <li><a routerLink="/products" [queryParams]="{category: 'sports'}">Sports & Books</a></li>
+          <li><a routerLink="/products" [queryParams]="{category: 'more'}">More</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

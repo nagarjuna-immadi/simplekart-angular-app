@@ -1,0 +1,191 @@
+<div class="container admin-container">
+  <div class="row" *ngIf="!isFormLoading">
+    <div class="col-2"></div>    
+    <div class="col-7">
+      <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="simplekart-form">
+        
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Email</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" formControlName="email" placeholder="Email">
+            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+              <div *ngIf="email.errors.required">
+                Email is required.
+              </div>
+              <div *ngIf="email.errors.email">
+                Please enter a valid email.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">First Name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" formControlName="firstName" placeholder="First name">
+            <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="alert alert-danger">
+              <div *ngIf="firstName.errors.required">
+                First name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Last Name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" formControlName="lastName" placeholder="Last name">
+            <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger">
+              <div *ngIf="lastName.errors.required">
+                Last name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Gender</label>
+          <div class="col-sm-10 align-inline-items">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="gender" [value]="'Male'">
+              <label class="form-check-label">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="gender" [value]="'Female'">
+              <label class="form-check-label">Female</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Is Active</label>
+          <div class="col-sm-10 align-inline-items">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="isActive" [value]="true">
+              <label class="form-check-label">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="isActive" [value]="false">
+              <label class="form-check-label">No</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row addresses-group" formArrayName="addresses">
+          <label class="col-sm-2 col-form-label">Addresses</label>
+          <div class="col-sm-10 addresses-list">
+            <div class="card" [formGroup]="addressGroup"  *ngFor="let addressGroup of addresses.controls; let i=index;">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-6 title">Address {{ i + 1 }}</div>
+                  <div class="col-6 text-right"><button class="btn btn-danger btn-sm" (click)='deleteAddress(i)'>Delete</button></div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label">Address Type</label>
+                  <div class="col-sm-9 align-inline-items">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" formControlName="type" value="Home">
+                      <label class="form-check-label">Home</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" formControlName="type" value="Office">
+                      <label class="form-check-label">Office</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" formControlName="type" value="Bussiness">
+                      <label class="form-check-label">Bussiness</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" formControlName="street1" placeholder="Street 1" />
+                    <div *ngIf="addressGroup.controls.street1.invalid && (addressGroup.controls.street1.dirty || addressGroup.controls.street1.touched)" class="alert alert-danger">
+                      <div *ngIf="addressGroup.controls.street1.errors.required">
+                        Street is required.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" formControlName="street2" placeholder="Street 2" />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-sm-12">
+                    <select class="form-control" formControlName="state" (change)="loadCities(i, addressGroup.controls.state.value)">
+                      <option value="">Select State</option>
+                      <option [value]="state._id" *ngFor="let state of states">{{ state.name }}</option>
+                    </select>
+                    <div *ngIf="addressGroup.controls.state.invalid && (addressGroup.controls.state.dirty || addressGroup.controls.state.touched)" class="alert alert-danger">
+                      <div *ngIf="addressGroup.controls.state.errors.required">
+                        Please select a state.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-sm-12 city-dropdown">
+                    <select class="form-control" formControlName="city">
+                      <option value="">Select City</option>
+                      <option [value]="city._id" *ngFor="let city of cityElementsData[i].cities">{{ city.name }}</option>
+                    </select>
+                    <img class="city-loader" src="../../../assets/img/loader.gif" *ngIf="cityElementsData[i].isLoading" />
+                    <div *ngIf="addressGroup.controls.city.invalid && (addressGroup.controls.city.dirty || addressGroup.controls.city.touched)" class="alert alert-danger">
+                      <div *ngIf="addressGroup.controls.city.errors.required">
+                        Please select a city.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" formControlName="zip" placeholder="Zip code" />
+                    <div *ngIf="addressGroup.controls.zip.invalid && (addressGroup.controls.zip.dirty || addressGroup.controls.zip.touched)" class="alert alert-danger">
+                      <div *ngIf="addressGroup.controls.zip.errors.required">
+                        Zip code is required.
+                      </div>
+                      <div *ngIf="addressGroup.controls.zip.errors.pattern">
+                        Please enter a valid zip code.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <button class="btn btn-primary" (click)='addAddress($event)'><i class="fas fa-plus-circle"></i> Add Address</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="true" (close)='errorMessage=""'>{{ errorMessage }}</ngb-alert>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label"></label>
+          <div class="col-sm-10 align-right">
+            <button class="btn btn-default" (click)='cancle($event)'>cancel</button>
+            <button type="submit" class="btn btn-success" [disabled]="!userForm.valid">{{ isEdit ? 'Update' : 'Save' }} User</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="col-3"></div> 
+  </div>
+  <div class="text-center" *ngIf="isFormLoading">
+    <img src="../../../assets/img/loader.gif" />
+  </div>
+</div>

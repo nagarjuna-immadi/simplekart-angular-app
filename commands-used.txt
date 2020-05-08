@@ -1,0 +1,19 @@
+> ng g m home --routing
+
+To start mongo server:
+----------------------
+C:/> mongod
+
+To start server:
+----------------
+> nodemon --inspect server.js
+
+Install dependencies:
+---------------------
+npm install bootstrap --save
+npm install @fortawesome/fontawesome-free --save
+
+Logins:
+=======
+Admin: admin@simplekart.com / test123
+Customer: nagarjuna@gmail.com / test123
